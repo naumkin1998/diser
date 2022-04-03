@@ -20,16 +20,16 @@ def belt_efinition_I_poes(end_of_line : int, baza, set_no_refund : set):
     set_no_refund.update(set_yz_for_I_poes)
     return set_yz_for_I_poes
 
-def line_of_I_poes(set_yz, baza, set_no_refund, set_yzel_for_II_poes):
+def line_of_I_poes(set_yz_for_I_poes, baza, set_no_refund, set_yzel_for_II_poes):
     """
 
-    :param set_yz:
+    :param set_yz_for_I_poes:
     :param baza:
     :param set_no_refund:
     :param set_yzel_for_II_poes:
     :return:
     """
-    for yz in set_yz:
+    for yz in set_yz_for_I_poes:
         set_ez_for_line = set()
         sort_baza_of_end_of_line = baza.query(f'(Узел1 == {yz} or Узел2 == {yz}) '
                                               f'and (Тип == 0)'

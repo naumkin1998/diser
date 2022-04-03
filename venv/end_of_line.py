@@ -13,8 +13,6 @@ def end_of_line(start : int, end : int, baza, step : str, set_no_refund : set):
     :param set_no_refund:  узлы не возврата
     :return: конец линии
     """
-    # добовляем узлы в set для невозврата назад
-
     # сортировка базы данных по исходным данным
     sort_of_vetv = baza.query(f'(Узел1 == {start} and Узел2 == {end})'
                               f'or (Узел1 == {end} and Узел2 == {start})')
@@ -92,6 +90,5 @@ def end_of_line(start : int, end : int, baza, step : str, set_no_refund : set):
     with open(new_file_ot, 'w+') as f:
         f.truncate(0)
         f.write(result)
-        # print (result)
 
     return end_of_line
