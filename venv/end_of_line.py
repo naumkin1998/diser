@@ -31,36 +31,53 @@ def end_of_line(start : int, end : int, baza, step : str, set_no_refund : set):
 
     # определение противоположного конца линии
 
-    sort_of_number_element = baza[(baza['Nэл.'] == number)].query('(Nз1 !=0 or Nз2 !=0)'
-                                                                  f'and (Nз1 !={nomber_protection} '
-                                                                  f'and Nз2 !={nomber_protection})')
+    if(baza[(baza['Nэл.'] == number)].query('(Nз1 !=0 and Nз2 !=0)').shape[0] == 1):
+        sort_of_number_element = baza[(baza['Nэл.'] == number)].query('(Nз1 !=0 or Nз2 !=0)'
+                                                                      f'and (Nз1 !={nomber_protection} '
+                                                                      f'or Nз2 !={nomber_protection})')
+        yzel1 = int(sort_of_number_element.iloc[0]['Узел1'])
+        yzel2 = int(sort_of_number_element.iloc[0]['Узел2'])
+        if( yzel1 != start):
+            end_of_line = yzel1
+        if (yzel1 != start):
+            end_of_line = yzel2
 
-    # определяем номер конца линии
-    if (len(sort_of_number_element) == 0):
-        return
-    yzel1 = int(sort_of_number_element.iloc[0]['Узел1'])
-    yzel2 = int(sort_of_number_element.iloc[0]['Узел2'])
+
+    elif(baza[(baza['Nэл.'] == number)].query('(Nз1 !=0 or Nз2 !=0)').shape[0] > 1):
+
+        sort_of_number_element = baza[(baza['Nэл.'] == number)].query('(Nз1 !=0 or Nз2 !=0)'
+                                                                      f'and (Nз1 !={nomber_protection} '
+                                                                      f'and Nз2 !={nomber_protection})')
+
+        # определяем номер конца линии
+        if (len(sort_of_number_element) == 0):
+            return
+        yzel1 = int(sort_of_number_element.iloc[0]['Узел1'])
+        yzel2 = int(sort_of_number_element.iloc[0]['Узел2'])
 
 
-    list_yzel = [yzel1, yzel2]
-    count_yz = 0
-    end_of_line = 0
+        list_yzel = [yzel1, yzel2]
+        count_yz = 0
+        end_of_line = 0
 
-    # print('начало цикла')
-    for yz in list_yzel:
-        if (len(baza.query(f'(Nз1 !=0 or Nз2 !=0)'
-                        f'and '
-                        f'(Узел1 == {yz}'
-                        f'or Узел2 == {yz})'))
-                > count_yz):
-            count_yz = len(baza.query(f'(Nз1 !=0 or Nз2 !=0)'
-                                   f'and '
-                                   f'(Узел1 == {yz}'
-                                   f'or Узел2 == {yz})'))
-            end_of_line = yz
+        # print('начало цикла')
+        for yz in list_yzel:
+            if (len(baza.query(f'(Nз1 !=0 or Nз2 !=0)'
+                            f'and '
+                            f'(Узел1 == {yz}'
+                            f'or Узел2 == {yz})'))
+                    > count_yz):
+                count_yz = len(baza.query(f'(Nз1 !=0 or Nз2 !=0)'
+                                       f'and '
+                                       f'(Узел1 == {yz}'
+                                       f'or Узел2 == {yz})'))
+                end_of_line = yz
 
-    if(end_of_line in set_no_refund):
-        return
+        if(end_of_line in set_no_refund):
+            return
+
+    elif (baza[(baza['Nэл.'] == number)].query('(Nз1 !=0 and Nз2 !=0)').shape[0] == 0):
+        return None
 
     number_protection = int(f'{number}{nomber_protection}')
     # print(f'{start}, {end}, {number_protection}, {end_of_line}')
